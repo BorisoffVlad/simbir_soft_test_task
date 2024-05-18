@@ -1,29 +1,27 @@
 import pytest
 from selenium import webdriver
-from selenium.webdriver import DesiredCapabilities
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.driver_cache import DriverCacheManager
 
 
 def pytest_addoption(parser):
     parser.addoption("--headless", action="store", default=False)
+    parser.addoption("--browser", action="store", default="chrome")
 
 
 @pytest.fixture(scope="function")
 def browser(request):
+    browser_name = request.config.getoption("--browser")
     headless = request.config.getoption("--headless")
-    options = webdriver.ChromeOptions()
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    if headless:
-        options.add_argument("--headless")
-    chrome_service = Service(
-        ChromeDriverManager(cache_manager=DriverCacheManager(valid_range=180)).install()
-    )
-    browser = webdriver.Chrome(options=options, service=chrome_service)
-
-    browser.set_page_load_timeout(10)
+    if browser_name == "chrome":
+        options = webdriver.ChromeOptions()
+        if headless:
+            options.add_argument("--headless")
+        browser = webdriver.Remote(options=options)
+    elif browser_name == "firefox":
+        options = webdriver.FirefoxOptions()
+        if headless:
+            options.add_argument("--headless")
+        browser = webdriver.Remote(options=options)
+    else:
+        raise ValueError("Браузер должен быть одним из: chrome, firefox")
     yield browser
-    browser.delete_all_cookies()
     browser.quit()
