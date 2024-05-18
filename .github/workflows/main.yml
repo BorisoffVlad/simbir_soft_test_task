@@ -18,7 +18,7 @@ jobs:
 
     - name: Install Selenium Grid
       run: |
-        wget https://selenium-release.storage.googleapis.com/4.1/selenium-server-4.1.0.jar
+        wget https://dl.google.com/android/repository/selenium-server-standalone-3.141.59.jar
         java -jar selenium-server-4.1.0.jar standalone &
 
     - name: Install Allure
