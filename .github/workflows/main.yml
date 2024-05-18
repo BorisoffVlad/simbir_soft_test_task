@@ -1,0 +1,45 @@
+name: Run autotests
+
+on:
+  workflow_dispatch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Java
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+
+    - name: Install Selenium Grid
+      run: |
+        wget https://selenium-release.storage.googleapis.com/4.1/selenium-server-4.1.0.jar
+        java -jar selenium-server-4.1.0.jar standalone &
+
+    - name: Install Allure
+      run: |
+        wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.14.0/allure-commandline-2.14.0.zip
+        unzip allure-commandline-2.14.0.zip
+
+    - name: Install Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run Tests
+      run: |
+        pytest tests/test_transactions.py --headless=True --alluredir=./allure-results
+
+    - name: Generate Allure Report
+      run: |
+        ./allure-2.14.0/bin/allure generate --clean
+        ./allure-2.14.0/bin/allure serve
