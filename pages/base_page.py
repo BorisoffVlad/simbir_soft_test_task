@@ -37,30 +37,6 @@ class BasePage(ABC):
             element.clear()
             element.send_keys(text)
 
-    def get_element_text(self, locator, timeout=DEFAULT_TIMEOUT):
-        with allure.step(f"Получаем текст элемента страницы по локатору {locator}"):
-            element = self.find_element(locator, timeout)
-            return element.text
-
-    def scroll_to_element(self, locator):
-        with allure.step(f"Скроллим к элементу с локатором {locator}"):
-            element = self.browser.find_element(*locator)
-            self.browser.execute_script("arguments[0].scrollIntoView();", element)
-            time.sleep(DEFAULT_TIMEOUT)
-            return element
-
-    def scroll_to_element_and_click(self, locator):
-        with allure.step(
-            f"Скроллим к элементу с локатором {locator} и кликаем на него"
-        ):
-            self.scroll_to_element(locator).click()
-
-    def scroll_to_element_and_input_text(self, locator, text):
-        with allure.step(f"Скроллим к элементу с локатором {locator} и вводим текст"):
-            el = self.scroll_to_element(locator)
-            el.clear()
-            el.send_keys(text)
-
     def get_element_property(self, locator, property_name):
         with allure.step(
             f"Получение property = {property_name} элемента с локатором {locator}"

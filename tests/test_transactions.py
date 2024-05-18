@@ -1,9 +1,8 @@
 import allure
 import pytest
 
-import csv_generator
-import validators
-from deposit_generator import DepositGenerator
+from utils import validators, csv_generator
+from utils.deposit_generator import DepositGenerator
 from pages.banking_project_pages.account_page import AccountPage
 from pages.banking_project_pages.customer_page import CustomerPage
 from pages.banking_project_pages.login_page import LoginPage
