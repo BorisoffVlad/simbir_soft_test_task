@@ -5,6 +5,7 @@ permissions:
   contents: write
   pull-requests: write
   repository-projects: write
+  pages: write
 
 name: Run autotests
 
