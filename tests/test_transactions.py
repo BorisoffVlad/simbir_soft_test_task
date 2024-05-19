@@ -1,8 +1,7 @@
 import allure
 import pytest
 
-from utils import validators, csv_generator
-from utils.deposit_generator import DepositGenerator
+from utils import validators, csv_utils, deposit_utils
 from pages.banking_project_pages.account_page import AccountPage
 from pages.banking_project_pages.customer_page import CustomerPage
 from pages.banking_project_pages.login_page import LoginPage
@@ -18,7 +17,6 @@ class TestTransactions:
             login_page,
             customer_page,
             account_page,
-            deposit_generator,
             customer_name,
             deposit,
         ) = setup_pages_fixture
@@ -63,7 +61,6 @@ class TestTransactions:
             login_page,
             customer_page,
             account_page,
-            deposit_generator,
             customer_name,
             deposit,
         ) = setup_pages_fixture
@@ -91,7 +88,7 @@ class TestTransactions:
         account_page.click_transactions_button()
         transactions_table_sting = transactions_page.get_transaction_table_data()
 
-        csv_generator.attach_csv_file_to_allure_report(transactions_table_sting)
+        csv_utils.attach_csv_file_to_allure_report(transactions_table_sting)
 
         # Assert
         validators.check_substring(
@@ -111,15 +108,13 @@ def setup_pages_fixture(browser):
     login_page = LoginPage(browser)
     customer_page = CustomerPage(browser)
     account_page = AccountPage(browser)
-    deposit_generator = DepositGenerator()
     customer_name = "Harry Potter"
-    deposit = deposit_generator.get_deposit()
+    deposit = deposit_utils.get_deposit()
 
     return (
         login_page,
         customer_page,
         account_page,
-        deposit_generator,
         customer_name,
         deposit,
     )
