@@ -68,9 +68,6 @@ jobs:
     steps:
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v3
-      - name: Setup GitHub token
-        run: echo "::set-env name=GH_TOKEN::${{ secrets.GH_PAGES_TOKEN }}"
-        shell: bash
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v2
         with:
