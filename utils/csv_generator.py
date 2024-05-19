@@ -33,7 +33,7 @@ def create_csv_file_from_string(data_string):
         rus_headers = russify_headers(eng_headers)
         data = [line.split("\t") for line in data_list[1:]]
 
-        file_path = "csv/transactions.csv"
+        file_path = "transactions.csv"
         with open(file_path, mode="w", encoding="utf-8", newline="") as file:
             writer = csv.writer(file)
             writer.writerow(rus_headers)
@@ -63,14 +63,17 @@ def attach_csv_file_to_allure_report(data_string):
         attach_csv_file_to_allure_report("Name,Age\\nJohn,25\\nAlice,30")
     """
     with allure.step("Создаем CSV файл"):
-        csv_file_path = create_csv_file_from_string(data_string)
-        with open(csv_file_path, "rb") as file:
-            allure.attach(
-                file.read(),
-                name="Таблица транзакций",
-                attachment_type=allure.attachment_type.CSV,
-            )
-        os.remove(csv_file_path)
+        try:
+            csv_file_path = create_csv_file_from_string(data_string)
+            with open(csv_file_path, "rb") as file:
+                allure.attach(
+                    file.read(),
+                    name="Таблица транзакций",
+                    attachment_type=allure.attachment_type.CSV,
+                )
+            os.remove(csv_file_path)
+        except Exception as e:
+            raise Exception(f"Ошибка при прикреплении CSV файла: {e}")
 
 
 def russify_headers(header_list):
