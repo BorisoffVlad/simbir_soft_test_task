@@ -20,12 +20,12 @@
 8) Оформить сформированный файл как вложение к отчету allure
 
 # Allure отчет:
-1) Проверка баланса после пополнения и вывода депозита
-2) Проверка наполнения таблицы транзакциями после пополнения и вывода депозита
+1) [Проверка баланса после пополнения и вывода депозита](https://github.com/BorisoffVlad/simbir_soft_test_task/blob/main/allure_report_screenshots/Screenshot_4.jpg)
+2) [Проверка наполнения таблицы транзакциями после пополнения и вывода депозита](https://github.com/BorisoffVlad/simbir_soft_test_task/blob/main/allure_report_screenshots/Screenshot_5.jpg)
 
 # Документация по локальному разворачиванию тестового окружения и запуска тестов
 1) Склонировать репозиторий - < git clone https://github.com/BorisoffVlad/simbir_soft_test_task >
 2) Развернуть сервер Selenium GRID - < java -jar selenium-server-4.21.0.jar standalone --config grid_config.json >
-3) Запуск тестов с формированием allure - отчета - < pytest tests/test_transactions.py --alluredir=./allure-results > \
+3) Запуск тестов с формированием allure-отчета - < pytest tests/test_transactions.py --alluredir=./allure-results > \
 (опционально, можно добавить параметр < --headless=True > для запуска в headless-режиме)
 4) Сформировать allure - отчет - < allure serve >
