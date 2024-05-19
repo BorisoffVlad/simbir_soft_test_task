@@ -1,5 +1,8 @@
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+permissions:
+  id-token: write
+
 name: Run autotests
 
 on:
