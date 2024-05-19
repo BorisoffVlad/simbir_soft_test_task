@@ -10,21 +10,20 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Setup Java
-      uses: actions/setup-java@v2
-      with:
-        distribution: 'adopt'
-        java-version: '11'
+    # - name: Setup Java
+    #   uses: actions/setup-java@v2
+    #   with:
+    #     distribution: 'adopt'
+    #     java-version: '11'
 
-    - name: Install Selenium Grid
+    - name: Run Selenium Grid Server
       run: |
-        wget https://selenium-release.storage.googleapis.com/4.1/selenium-server-4.1.0.jar
         java -jar selenium-server-4.1.0.jar standalone &
 
-    - name: Install Allure
-      run: |
-        wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.14.0/allure-commandline-2.14.0.zip
-        unzip allure-commandline-2.14.0.zip
+    # - name: Install Allure
+    #   run: |
+    #     wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.14.0/allure-commandline-2.14.0.zip
+    #     unzip allure-commandline-2.14.0.zip
 
     - name: Install Python
       uses: actions/setup-python@v2
@@ -37,9 +36,39 @@ jobs:
 
     - name: Run Tests
       run: |
-        pytest tests/test_transactions.py --headless=True --alluredir=./allure-results
+        pytest tests/test_transactions.py --headless=True --alluredir=./allure-results --executor=http://localhost:4444/wd/hub
 
-    - name: Generate Allure Report
-      run: |
-        ./allure-2.14.0/bin/allure generate --clean
-        ./allure-2.14.0/bin/allure serve
+  
+  generate-report:
+    runs-on: ubuntu-latest
+    needs: test
+    name: Generate report
+    steps:
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'microsoft' 
+          java-version: '17'
+      - run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.23.1/allure-2.23.1.tgz && sudo tar -zxvf allure-2.23.1.tgz -C /opt/ && sudo ln -s /opt/allure-2.23.1/bin/allure /usr/bin/allure
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v3
+      - run: allure generate -c allure-results -o _site
+      - name: Store generated report
+        uses: actions/upload-artifact@v3
+        with:
+          name: _site
+          path:
+            _site
+          retention-days: 1
+
+  publish-report:
+    runs-on: ubuntu-latest
+    needs: generate-report
+    name: Report publication
+    steps:
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v3
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v2
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1.2.9
