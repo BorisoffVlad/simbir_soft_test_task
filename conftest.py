@@ -5,7 +5,7 @@ from selenium import webdriver
 def pytest_addoption(parser):
     parser.addoption("--headless", action="store", default=False)
     parser.addoption("--browser", action="store", default="chrome")
-    parser.addoption("--executor", action="store", default="http://127.0.0.1:4444/wd/hub")
+    parser.addoption("--executor", action="store", default="http://192.168.0.11:4444")
 
 
 @pytest.fixture(scope="function")
