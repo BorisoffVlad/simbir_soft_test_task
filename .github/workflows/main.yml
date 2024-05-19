@@ -2,9 +2,9 @@ env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 permissions:
   id-token: write
-  contents: write
-  pull-requests: write
-  repository-projects: write
+#  contents: write
+#  pull-requests: write
+#  repository-projects: write
   pages: write
 
 name: Run autotests
