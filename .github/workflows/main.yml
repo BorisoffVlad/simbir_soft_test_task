@@ -36,7 +36,8 @@ jobs:
 
     - name: Run Tests
       run: |
-        pytest tests/test_transactions.py --headless=True --alluredir=./allure-results
+        pytest tests/test_transactions.py --headless=True --alluredir=./allure-results --executor=http://localhost:4444/wd/hub
+
   
   generate-report:
     runs-on: ubuntu-latest
