@@ -27,7 +27,7 @@ jobs:
 
     - name: Run Selenium Grid Server
       run: |
-        java -jar selenium-server-4.21.0.jar standalone --config grid_config.json &
+        java -jar selenium-server-4.21.0.jar standalone --config grid_config.json --selenium-manager true &
 
     - name: Run Tests
       run: |
